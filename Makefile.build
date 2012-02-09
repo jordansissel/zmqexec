@@ -19,13 +19,13 @@ LDFLAGS=-pthread
 
 VPATH=../src
 
+zmqexec.c: include/zmq.h include/zmq_utils.h
+
 zmqexec: zmqexec.o | libzmq.a libuuid.a
 	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
 
-zmqexec.c: include/zmq.h include/zmq_utils.h
-
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+#%.o: %.c
+#$(CC) $(CFLAGS) -c $< -o $@
 
 $(ZMQTAR):
 	wget $(ZMQURL) || curl -o $@ $(ZMQURL)
