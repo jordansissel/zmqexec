@@ -24,8 +24,8 @@ zmqexec.c: include/zmq.h include/zmq_utils.h
 zmqexec: zmqexec.o | libzmq.a libuuid.a
 	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
 
-#%.o: %.c
-#$(CC) $(CFLAGS) -c $< -o $@
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(ZMQTAR):
 	wget $(ZMQURL) || curl -o $@ $(ZMQURL)
@@ -35,7 +35,7 @@ $(ZMQDIR)/: | $(ZMQTAR)
 
 $(ZMQDIR)/src/.libs/libzmq.a: | $(ZMQDIR)/
 	(cd $(ZMQDIR); ./configure)
-	$(MAKE) -C $(ZMQDIR)
+	$(MAKE) -j2 -C $(ZMQDIR)
 
 include/:
 	mkdir $@
