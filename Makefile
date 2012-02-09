@@ -1,7 +1,6 @@
 BUILDDIR=build
 
-%: $(BUILDDIR)/Makefile
-	make -C $(BUILDDIR) $@
+default: zmqexec
 
 .PHONY: clean
 clean:
@@ -10,5 +9,8 @@ clean:
 $(BUILDDIR)/:
 	mkdir $(BUILDDIR)
 
-$(BUILDDIR)/Makefile: Makefile.build | $(BUILDDIR)
-	cp $< $@
+# Any other make target should invoke the build/ make
+.DEFAULT:
+	make $(BUILDDIR)/
+	make -C $(BUILDDIR) -f ../Makefile.build $@
+
