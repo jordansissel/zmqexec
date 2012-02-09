@@ -20,7 +20,8 @@ int main (void) {
     zmq_recv (socket, &request, 0);
     printf("Received %.*s\n", zmq_msg_size(&request), zmq_msg_data(&request));
 
-    //  Send reply back to client
+    process(argc, argv, zmq_msg_size(&request), zmq_msg_data(&data));
+
     zmq_msg_t reply;
     zmq_msg_init_size(&reply, zmq_msg_size(&request));
     memcpy (zmq_msg_data(&reply), zmq_msg_data(&request), zmq_msg_size(&request));
@@ -32,4 +33,10 @@ int main (void) {
   zmq_close (socket);
   zmq_term (context);
   return 0;
+}
+
+void process(int argc, char *argv[], int size, char *data) {
+  /* TODO(sissel): fork+execve the program
+   * emit the message data to stdin
+   * read the reply from stdout. */
 }
