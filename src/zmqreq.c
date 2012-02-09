@@ -34,7 +34,7 @@ int main (int argc, char *argv[0]) {
     zmq_msg_t reply;
     zmq_msg_init(&reply);
     zmq_recv(socket, &reply, 0);
-    printf("Read: %.*s\n", zmq_msg_size(&reply), zmq_msg_data(&reply));
+    printf("Read: %.*s\n", (int)zmq_msg_size(&reply), (char *)zmq_msg_data(&reply));
     zmq_msg_close (&reply);
   }
   

@@ -9,7 +9,7 @@ ULTAR=util-linux-$(ULVERSION).tar.gz
 ULDIR=util-linux-$(ULVERSION)
 ULURL=http://www.kernel.org/pub/linux/utils/util-linux/v2.20/util-linux-$(ULVERSION).tar.gz
 
-CFLAGS+=-Iinclude -I../src
+CFLAGS+=-Iinclude -I../src -pipe -std=c99 -Wall
 
 # ZMQ requires all of these
 # TODO(sissel): -lrt is only required on Linux, not FreeBSD, etc, I think...
