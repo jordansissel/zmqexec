@@ -20,22 +20,30 @@ LDFLAGS=-pthread
 VPATH=../src
 
 zmqexec.c: include/zmq.h include/zmq_utils.h
+zmqreq.c: include/zmq.h include/zmq_utils.h
+zmqexec.o: include/zmq.h include/zmq_utils.h
+zmqreq.o: include/zmq.h include/zmq_utils.h
 
-zmqexec: zmqexec.o | libzmq.a libuuid.a
+zmqexec: zmqexec.o libzmq.a libuuid.a
+	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
+
+zmqreq: zmqreq.o libzmq.a libuuid.a
 	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $(SRC)/$< -o $@
 
 $(ZMQTAR):
-	wget $(ZMQURL) || curl -o $@ $(ZMQURL)
+	wget -q $(ZMQURL) || curl -s -o $@ $(ZMQURL)
 
 $(ZMQDIR)/: | $(ZMQTAR)
 	tar -zxf $(ZMQTAR)
 
-$(ZMQDIR)/src/.libs/libzmq.a: | $(ZMQDIR)/
-	(cd $(ZMQDIR); ./configure)
-	$(MAKE) -j2 -C $(ZMQDIR)
+$(ZMQDIR)/config.status: | $(ZMQDIR)/
+	cd $(ZMQDIR); ./configure
+
+$(ZMQDIR)/src/.libs/libzmq.a: | $(ZMQDIR)/config.status
+	make -j2 -C $(ZMQDIR)
 
 include/:
 	mkdir $@

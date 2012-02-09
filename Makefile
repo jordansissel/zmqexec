@@ -11,6 +11,6 @@ $(BUILDDIR)/:
 
 # Any other make target should invoke the build/ make
 .DEFAULT:
-	$(MAKE) $(MAKEARGS) $(BUILDDIR)/
-	$(MAKE) $(MAKEARGS) -C $(BUILDDIR) -f ../Makefile.build $@
+	$(MAKE) $(BUILDDIR)/
+	$(MAKE) -C $(BUILDDIR) -f ../Makefile.build SRC=$(PWD)/src $@ 
 

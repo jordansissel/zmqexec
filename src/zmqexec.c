@@ -16,15 +16,16 @@ int main (void) {
   for (;;) {
     zmq_msg_t request;
     zmq_msg_init (&request);
+    printf("Receiving...\n");
     zmq_recv (socket, &request, 0);
-    printf ("Received Hello\n");
-    zmq_msg_close (&request);
+    printf("Received %.*s\n", zmq_msg_size(&request), zmq_msg_data(&request));
 
     //  Send reply back to client
     zmq_msg_t reply;
-    zmq_msg_init_size (&reply, 5);
-    memcpy (zmq_msg_data (&reply), "World", 5);
+    zmq_msg_init_size(&reply, zmq_msg_size(&request));
+    memcpy (zmq_msg_data(&reply), zmq_msg_data(&request), zmq_msg_size(&request));
     zmq_send (socket, &reply, 0);
+    zmq_msg_close (&request);
     zmq_msg_close (&reply);
   }
   
