@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include <zmq.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -12,8 +13,23 @@ int write_all(int fd, const void *buf, size_t count);
 int main (int argc, char *argv[]) {
   void *context = zmq_init (1);
   void *socket = zmq_socket(context, ZMQ_REP);
+  char *port;
+  char *address;
   int rc;
-  zmq_bind(socket, "tcp://*:5555");
+
+  // check argc instead?
+  // need to make sure port is an int really
+  if(argc != 2) {
+    port = "5555";
+    fprintf(stderr, "using default port: %s\n", port);
+  }
+  else
+  {
+    port = argv[1];
+    fprintf(stderr, "using explicit port: %s\n", port);
+  }
+  asprintf(&address, "tcp://*:%s", port);
+  zmq_bind(socket, address);
 
   for (;;) {
     zmq_msg_t request;
@@ -37,6 +53,7 @@ int main (int argc, char *argv[]) {
   
   zmq_close (socket);
   zmq_term (context);
+  free(address);
   return 0;
 }
 
