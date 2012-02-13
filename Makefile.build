@@ -1,4 +1,3 @@
-
 ZMQVERSION=2.1.11
 ZMQTAR=zeromq-$(ZMQVERSION).tar.gz
 ZMQDIR=zeromq-$(ZMQVERSION)
@@ -61,7 +60,7 @@ $(ULDIR)/: | $(ULTAR)
 	tar -zxf $(ULTAR)
 
 $(ULDIR)/libuuid/src/.libs/libuuid.a: | $(ULDIR)/
-	cd $(ULDIR); ./configure
+	cd $(ULDIR); ./configure --without-ncurses
 	make -C $(ULDIR)/libuuid
 
 libuuid.a: | $(ULDIR)/libuuid/src/.libs/libuuid.a
