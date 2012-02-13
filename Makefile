@@ -6,11 +6,8 @@ default: zmqexec
 clean:
 	-rm -fr $(BUILDDIR)
 
-$(BUILDDIR)/:
-	mkdir $(BUILDDIR)
-
 # Any other make target should invoke the build/ make
 .DEFAULT:
-	$(MAKE) $(BUILDDIR)/
+	@-[ ! -d $(BUILDDIR)/ ] && mkdir $(BUILDDIR)/
 	$(MAKE) -C $(BUILDDIR) -f ../Makefile.build SRC=$(PWD)/src $@ 
 
